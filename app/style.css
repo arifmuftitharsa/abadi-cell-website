@@ -50,10 +50,11 @@ h1, h2, h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
+  height: 96px;
+  padding: 12px 0;
 }
 
-.brand-logo { height: 64px; display: block; }
+.brand-logo { height: 72px; display: block; }
 
 .main-nav { display: flex; gap: 28px; }
 .main-nav a {
