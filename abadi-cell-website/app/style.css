@@ -1,0 +1,269 @@
+:root {
+  --ink: #1A1A1A;
+  --ink-soft: #3D3D3D;
+  --paper: #F7F6F3;
+  --paper-raised: #FFFFFF;
+  --red: #D6332E;
+  --red-deep: #A8241F;
+  --line: #E3E1DA;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+a { color: inherit; }
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  line-height: 1.1;
+  margin: 0;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(247, 246, 243, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.brand-logo { height: 44px; display: block; }
+
+.main-nav { display: flex; gap: 28px; }
+.main-nav a {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  transition: color 0.15s ease;
+}
+.main-nav a:hover { color: var(--red); }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  background: var(--ink);
+  color: var(--paper);
+  overflow: hidden;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  padding: 96px 24px 120px;
+}
+
+.eyebrow {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #C9C6BC;
+  margin: 0 0 20px;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 700;
+  max-width: 12ch;
+}
+
+.hero h1 .accent { color: var(--red); }
+
+.hero-sub {
+  max-width: 46ch;
+  margin: 28px 0 36px;
+  color: #D4D1C8;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary {
+  background: var(--red);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--red-deep); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--paper);
+  border: 1.5px solid #55534B;
+}
+.btn-ghost:hover { border-color: var(--paper); }
+
+/* Signature element: jagged bolt-streak across the hero, echoing the logo's lightning mark */
+.hero-bolt {
+  position: absolute;
+  top: 0;
+  right: -6%;
+  width: 46%;
+  height: 100%;
+  z-index: 1;
+  background:
+    linear-gradient(115deg, transparent 46%, rgba(214,51,46,0.18) 47%, rgba(214,51,46,0.18) 50%, transparent 51%),
+    linear-gradient(115deg, transparent 60%, rgba(214,51,46,0.10) 61%, rgba(214,51,46,0.10) 63%, transparent 64%);
+  pointer-events: none;
+}
+
+/* ---------- Etalase (services) ---------- */
+.etalase { padding: 96px 0; }
+
+.etalase h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+}
+
+.section-sub {
+  color: var(--ink-soft);
+  margin: 12px 0 48px;
+  font-size: 1.02rem;
+}
+
+.rak-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.rak {
+  background: var(--paper-raised);
+  padding: 36px 28px;
+  position: relative;
+}
+
+.rak-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--red);
+  margin-bottom: 20px;
+}
+.rak-icon svg { width: 100%; height: 100%; }
+
+.rak h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.rak p {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* ---------- Lokasi ---------- */
+.lokasi { background: var(--paper-raised); padding: 96px 0; border-top: 1px solid var(--line); }
+
+.lokasi-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.lokasi h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  margin-bottom: 20px;
+}
+
+.lokasi-text p { color: var(--ink-soft); line-height: 1.6; margin-bottom: 28px; }
+
+.info-list { display: grid; gap: 16px; margin: 0; }
+.info-list > div { display: flex; gap: 16px; }
+.info-list dt {
+  font-weight: 600;
+  min-width: 90px;
+  color: var(--ink);
+}
+.info-list dd { margin: 0; color: var(--ink-soft); }
+
+.lokasi-map {
+  background: var(--ink);
+  color: #7A776E;
+  aspect-ratio: 4/3;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--ink); color: var(--paper); padding: 56px 0; }
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.footer-logo { height: 36px; margin-bottom: 12px; }
+.footer-inner p { margin: 0; color: #B9B6AC; font-size: 0.88rem; }
+.footer-label { font-size: 0.85rem; color: #B9B6AC; margin: 0 0 10px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .rak-list { grid-template-columns: repeat(2, 1fr); }
+  .lokasi-inner { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 540px) {
+  .main-nav { display: none; }
+  .rak-list { grid-template-columns: 1fr; }
+  .hero-inner { padding: 64px 24px 80px; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn { transition: none; }
+}
+
+/* Visible keyboard focus */
+a:focus-visible, .btn:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}

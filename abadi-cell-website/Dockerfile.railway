@@ -1,0 +1,22 @@
+# Dockerfile.railway — versi khusus untuk deploy di Railway/Render (PaaS)
+#
+# Perbedaan dari Dockerfile utama (untuk VPS):
+# Railway/Render menyuntikkan environment variable $PORT secara dinamis
+# saat container jalan, dan platform mereka yang menangani HTTPS/domain
+# di lapisan depan (load balancer mereka), bukan kita yang atur Nginx-nya.
+# Maka konfigurasi Nginx di sini perlu listen di $PORT, bukan hardcode 80.
+
+FROM nginx:1.27-alpine
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Template konfigurasi -- placeholder $PORT akan diganti saat container start
+COPY nginx/railway.conf.template /etc/nginx/templates/default.conf.template
+
+COPY app/ /usr/share/nginx/html/
+
+# Railway mengoper port lewat env var, defaultnya 8080 kalau tidak diset
+ENV PORT=8080
+EXPOSE 8080
+
+CMD ["/bin/sh", "-c", "envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]

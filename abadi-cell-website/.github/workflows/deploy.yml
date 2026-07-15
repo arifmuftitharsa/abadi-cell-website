@@ -1,0 +1,40 @@
+# .github/workflows/deploy.yml
+#
+# CI/CD sederhana: setiap push ke branch `main`, workflow ini akan
+# SSH ke VPS, tarik kode terbaru dari GitHub, lalu rebuild & restart
+# container Docker. Ini menggantikan proses manual "upload file lewat FTP"
+# dengan alur yang reproducible dan terdokumentasi.
+#
+# Prasyarat (diatur di GitHub repo -> Settings -> Secrets and variables -> Actions):
+#   VPS_HOST        alamat IP atau domain VPS
+#   VPS_USER        username SSH di VPS (bukan root, demi keamanan)
+#   VPS_SSH_KEY     private key SSH (bukan password) untuk autentikasi
+#   VPS_PROJECT_DIR path folder project di VPS, misal /home/deploy/abadi-cell-website
+
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:   # memungkinkan trigger manual dari tab Actions di GitHub
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout kode (untuk validasi sebelum deploy)
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd ${{ secrets.VPS_PROJECT_DIR }}
+            git pull origin main
+            docker compose build web
+            docker compose up -d web
+            docker image prune -f
