@@ -223,10 +223,12 @@ h1, h2, h3 {
   color: #7A776E;
   aspect-ratio: 4/3;
   border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
   font-size: 0.9rem;
+}
+
+.lokasi-map iframe {
+  display: block;
 }
 
 /* ---------- Footer ---------- */
