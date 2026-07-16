@@ -104,28 +104,28 @@ h1, h2, h3 { margin: 0; }
   font-size: 15px;
 }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero (2 kolom: teks kiri, ilustrasi kanan) ---------- */
 .hero { padding: 96px 0; }
 
 .hero-inner {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 48px;
   align-items: center;
-  text-align: center;
 }
 
 /* Display: 56-72px desktop / 36-40px mobile, w600, lh 1.0, ls -0.022em */
 .hero h1 {
-  font-size: clamp(2.375rem, 5.5vw, 4rem);
+  font-size: clamp(2.375rem, 5vw, 3.5rem);
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.022em;
-  max-width: 18ch;
+  max-width: 16ch;
 }
 
-/* Subheading: 24px, w400 */
+/* Subheading: w400 */
 .hero-sub {
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
   font-weight: 400;
   line-height: 1.45;
   color: var(--text-secondary);
@@ -137,7 +137,6 @@ h1, h2, h3 { margin: 0; }
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  justify-content: center;
   margin-top: 32px;
 }
 
@@ -146,6 +145,9 @@ h1, h2, h3 { margin: 0; }
   color: var(--text-secondary);
   margin: 24px 0 0;
 }
+
+.hero-art { max-width: 440px; justify-self: end; }
+.hero-art svg { display: block; width: 100%; height: auto; }
 
 /* ---------- Trust bar statis ---------- */
 .trust-bar {
@@ -172,6 +174,12 @@ h2 {
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.1;
+}
+
+.section-sub {
+  font-size: 17px;
+  color: var(--text-secondary);
+  margin: 12px 0 0;
 }
 
 /* ---------- Kartu layanan ---------- */
@@ -218,6 +226,33 @@ h2 {
   margin: 8px 0 0;
 }
 
+/* ---------- Brand yang Kami Sediakan ---------- */
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 40px 0 0;
+}
+
+.brand-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  padding: 16px 8px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+/* vivo & realme memakai wordmark huruf kecil */
+.brand-lc { text-transform: lowercase; letter-spacing: 0.04em; }
+
 /* ---------- Lokasi ---------- */
 .lokasi-inner {
   display: grid;
@@ -247,9 +282,9 @@ h2 {
   color: var(--text-secondary);
 }
 
-/* Peta: dimensi eksplisit di HTML + rasio tetap di CSS = tanpa layout shift */
+/* Peta: tinggi eksplisit 300px (sesuai brief) = tanpa layout shift */
 .lokasi-map {
-  aspect-ratio: 4 / 3;
+  height: 300px;
   border: 1px solid var(--hairline);
   border-radius: 12px;
   overflow: hidden;
@@ -284,6 +319,28 @@ h2 {
   color: var(--text-secondary);
 }
 
+.social-list {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+
+.social-list a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+
+.social-list a:hover { color: var(--accent); }
+
+.social-list svg { width: 22px; height: 22px; }
+
 .footer-label {
   font-size: 14px;
   color: var(--text-secondary);
@@ -291,6 +348,10 @@ h2 {
 }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .brand-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
 @media (max-width: 768px) {
   .hero { padding: 64px 0; }
   .section { padding: 64px 0; }
@@ -298,17 +359,24 @@ h2 {
   .main-nav { gap: 16px; }
   .main-nav a:not(.btn) { display: none; }
 
-  .card-grid { grid-template-columns: 1fr; }
-  .lokasi-inner { grid-template-columns: 1fr; gap: 32px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 0; }
+  .hero-copy { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .hero-art { max-width: 280px; justify-self: center; margin-top: 40px; }
 
   .hero-actions { width: 100%; flex-direction: column; }
   .hero-actions .btn { width: 100%; }
+
+  .card-grid { grid-template-columns: 1fr; }
+  .brand-grid { grid-template-columns: repeat(3, 1fr); }
+  .brand-tile { min-height: 60px; font-size: 14px; }
+
+  .lokasi-inner { grid-template-columns: 1fr; gap: 32px; }
 }
 
 /* Matikan animasi & smooth scroll jika user memintanya */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .btn, .main-nav a { transition: none; }
+  .btn, .main-nav a, .social-list a { transition: none; }
 }
 
 /* Fokus keyboard terlihat jelas */

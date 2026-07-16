@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260717">
+<link rel="stylesheet" href="style.css?v=20260718">
 </head>
 <body>
 
@@ -30,13 +30,46 @@
 
   <section class="hero">
     <div class="wrap hero-inner">
-      <h1>Butuh pulsa, aksesoris, atau elektronik rumah diperbaiki?</h1>
-      <p class="hero-sub">Abadi Cell & Elektrik melayani kebutuhan komunikasi dan elektronik rumah tangga Anda di satu tempat. Datang langsung atau chat dulu sebelum memutuskan.</p>
-      <div class="hero-actions">
-        <a href="https://wa.me/628567121314?text=Halo%20Abadi%20Cell%2C%20saya%20mau%20tanya-tanya%20soal%20produk%2Flayanan." class="btn btn-primary">Chat via WhatsApp</a>
-        <a href="#layanan" class="btn btn-secondary">Lihat Layanan</a>
+      <div class="hero-copy">
+        <h1>Butuh pulsa, aksesoris, atau elektronik rumah diperbaiki?</h1>
+        <p class="hero-sub">Abadi Cell & Elektrik melayani kebutuhan komunikasi dan elektronik rumah tangga Anda di satu tempat. Datang langsung atau chat dulu sebelum memutuskan.</p>
+        <div class="hero-actions">
+          <a href="https://wa.me/628567121314?text=Halo%20Abadi%20Cell%2C%20saya%20mau%20tanya-tanya%20soal%20produk%2Flayanan." class="btn btn-primary">Chat via WhatsApp</a>
+          <a href="#layanan" class="btn btn-secondary">Lihat Layanan</a>
+        </div>
+        <p class="hero-chip">Buka setiap hari &middot; 07.30-21.00 WIB</p>
       </div>
-      <p class="hero-chip">Buka setiap hari &middot; 07.30-21.00 WIB</p>
+
+      <!-- Ilustrasi line-art: HP, sinyal, baterai, charger -->
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 480 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- HP -->
+          <rect x="180" y="46" width="160" height="308" rx="26" stroke="#1d1d1f" stroke-width="3.5"/>
+          <line x1="236" y1="76" x2="284" y2="76" stroke="#1d1d1f" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="260" cy="326" r="4" fill="#1d1d1f"/>
+          <!-- Indikator mengisi daya di layar (satu-satunya warna kontras) -->
+          <path d="M270 136 L226 212 H256 L242 276 L296 196 H264 Z" fill="#25D366"/>
+          <!-- Sinyal wifi -->
+          <path d="M366 128 A 48 48 0 0 1 434 128" stroke="#6b6c6c" stroke-width="3" stroke-linecap="round"/>
+          <path d="M380 142 A 28 28 0 0 1 420 142" stroke="#6b6c6c" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="400" cy="156" r="4" fill="#6b6c6c"/>
+          <!-- Baterai -->
+          <rect x="64" y="140" width="70" height="32" rx="8" stroke="#6b6c6c" stroke-width="3"/>
+          <rect x="134" y="149" width="8" height="14" rx="3" fill="#6b6c6c"/>
+          <rect x="72" y="148" width="34" height="16" rx="4" fill="#25D366"/>
+          <!-- Charger -->
+          <rect x="382" y="284" width="36" height="38" rx="7" stroke="#6b6c6c" stroke-width="3"/>
+          <line x1="391" y1="284" x2="391" y2="268" stroke="#6b6c6c" stroke-width="3" stroke-linecap="round"/>
+          <line x1="409" y1="284" x2="409" y2="268" stroke="#6b6c6c" stroke-width="3" stroke-linecap="round"/>
+          <path d="M400 322 C 400 352, 366 352, 346 352" stroke="#6b6c6c" stroke-width="3" stroke-linecap="round"/>
+          <!-- Aksen geometris kecil -->
+          <circle cx="96" cy="84" r="5" stroke="#6b6c6c" stroke-width="3"/>
+          <path d="M110 300 h16 M118 292 v16" stroke="#6b6c6c" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="410" cy="52" r="4" fill="#6b6c6c"/>
+          <!-- Alas -->
+          <line x1="150" y1="384" x2="370" y2="384" stroke="#e0e0e0" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
     </div>
   </section>
 
@@ -87,6 +120,28 @@
     </div>
   </section>
 
+  <section class="section" id="brand">
+    <div class="wrap">
+      <h2>Brand yang Kami Sediakan</h2>
+      <p class="section-sub">Handphone dari brand-brand berikut tersedia di toko kami.</p>
+
+      <ul class="brand-grid">
+        <li class="brand-tile">OPPO</li>
+        <li class="brand-tile">SAMSUNG</li>
+        <li class="brand-tile">Xiaomi</li>
+        <li class="brand-tile brand-lc">vivo</li>
+        <li class="brand-tile brand-lc">realme</li>
+        <li class="brand-tile">Infinix</li>
+        <li class="brand-tile">Apple</li>
+        <li class="brand-tile">TECNO</li>
+        <li class="brand-tile">ADVAN</li>
+        <li class="brand-tile">ASUS</li>
+        <li class="brand-tile">POCO</li>
+        <li class="brand-tile">HUAWEI</li>
+      </ul>
+    </div>
+  </section>
+
   <section class="section section-tint" id="lokasi">
     <div class="wrap lokasi-inner">
       <div class="lokasi-text">
@@ -105,8 +160,8 @@
       </div>
       <div class="lokasi-map">
         <iframe
-          src="https://www.google.com/maps?q=Jl.+Pelabuhan+II,+Lembursitu,+Kec.+Lembursitu,+Kota+Sukabumi,+Jawa+Barat+43169&output=embed"
-          width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.0!2d106.8912479!3d-6.959512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68381f2f500c75%3A0xb4aebf6f8ba76f4b!2sAbadi%20Cell%20%26%20Elektrik!5e0!3m2!1sid!2sid!4v1721088000000!5m2!1sid!2sid"
+          width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
           title="Peta lokasi toko Abadi Cell & Elektrik"></iframe>
       </div>
@@ -120,6 +175,28 @@
     <div class="footer-brand">
       <img src="logo.png" alt="Abadi Cell & Elektrik" class="footer-logo" width="44" height="40">
       <p>&copy; <span id="year"></span> Abadi Cell & Elektrik. Sukabumi.</p>
+      <ul class="social-list">
+        <li>
+          <a href="https://instagram.com/abadicell.elektrik" target="_blank" rel="noopener" aria-label="Instagram Abadi Cell & Elektrik">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3"/><path d="M16.5 7.5v.01"/></svg>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.facebook.com/AbadiCellElektrik" target="_blank" rel="noopener" aria-label="Facebook Abadi Cell & Elektrik">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v4h3v7h4v-7h3l1-4h-4V8a1 1 0 0 1 1-1h3V3h-3a5 5 0 0 0-5 5v2H7"/></svg>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.tiktok.com/@abadicell.elektrik" target="_blank" rel="noopener" aria-label="TikTok Abadi Cell & Elektrik">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7.917v4.034a9.948 9.948 0 0 1-5-1.951v4.5a6.5 6.5 0 1 1-8-6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.005 6.005 0 0 0 4.917 4.917z"/></svg>
+          </a>
+        </li>
+        <li>
+          <a href="https://wa.me/628567121314" target="_blank" rel="noopener" aria-label="WhatsApp Abadi Cell & Elektrik">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
+          </a>
+        </li>
+      </ul>
     </div>
     <div class="footer-contact">
       <p class="footer-label">Hubungi Kami</p>
