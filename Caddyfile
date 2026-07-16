@@ -1,0 +1,32 @@
+# Caddyfile — service PUBLIK (reverse proxy)
+#
+# Menggantikan nginx-proxy karena Nginx (alpine/musl) punya known issue
+# gagal me-resolve *.railway.internal di private networking Railway.
+# Caddy melakukan DNS lookup ulang di tiap request secara native,
+# jadi tidak butuh trik resolver seperti Nginx.
+
+{
+	# Railway sudah menangani HTTPS di edge/load balancer mereka;
+	# Caddy tidak perlu (dan tidak boleh) mencoba menerbitkan sertifikat.
+	auto_https off
+	admin off
+}
+
+# Listen di port yang di-inject Railway lewat env var PORT
+:{$PORT} {
+	# Kompresi response (pengganti gzip di config Nginx lama)
+	encode gzip
+
+	# Security headers — sama seperti config Nginx sebelumnya
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	# Healthcheck ringan: dijawab langsung oleh proxy, tidak diteruskan ke app
+	respond /health "ok" 200
+
+	# Semua request lain diteruskan ke service privat "app"
+	reverse_proxy app.railway.internal:8080
+}

@@ -28,14 +28,14 @@ jobs:
       - name: Checkout kode
         uses: actions/checkout@v4
 
-      - name: Build image nginx-proxy (service publik)
+      - name: Build image proxy Caddy (service publik)
         run: docker build -f Dockerfile -t abadicell-proxy:ci .
 
       - name: Build image app (service privat)
         run: docker build -f Dockerfile.app -t abadicell-app:ci .
 
-      - name: Validasi konfigurasi Nginx proxy
-        run: docker run --rm abadicell-proxy:ci nginx -t
+      - name: Validasi Caddyfile proxy
+        run: docker run --rm abadicell-proxy:ci caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
 
       - name: Validasi konfigurasi Nginx app
         run: docker run --rm abadicell-app:ci nginx -t
