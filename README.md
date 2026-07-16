@@ -2,115 +2,118 @@
 
 Website profil toko elektronik & pulsa "Abadi Cell & Elektrik" di Sukabumi.
 Dibuat sebagai tugas tambahan mata kuliah **Jaringan Komputer** (CS4 2025,
-Universitas Pertamina) — deploy website pada Cloud/VPS dengan konfigurasi
-web server mandiri.
-
-> Dokumentasi ini ditulis untuk menjelaskan **kenapa** setiap keputusan
-> teknis diambil, bukan hanya **apa** yang dijalankan — karena tugas ini
-> mensyaratkan pemahaman konfigurasi, bukan sekadar hasil akhir.
+Universitas Pertamina) — deploy website ke cloud hosting dengan konfigurasi
+web server, containerization, reverse proxy, CI/CD, dan monitoring.
 
 ## Arsitektur
 
 ```
-                    Internet
-                       │
-                       │ HTTPS (port 443)
-                       ▼
-        ┌──────────────────────────────┐
-        │   VPS (Ubuntu)                │
-        │                                │
-        │   Nginx (reverse proxy)        │  <- install langsung di OS,
-        │   - Terminasi SSL/TLS          │     bukan di container
-        │   - Let's Encrypt certbot      │
-        │                                │
-        │        │ proxy_pass            │
-        │        │ (HTTP, port 8081)     │
-        │        ▼                       │
-        │   ┌─────────────────────┐      │
-        │   │ Docker container:    │      │
-        │   │ web (Nginx + static  │      │
-        │   │ HTML/CSS)             │      │
-        │   └─────────────────────┘      │
-        │                                │
-        │   ┌─────────────────────┐      │
-        │   │ Docker container:    │      │
-        │   │ uptime-kuma           │      │
-        │   │ (monitoring)          │      │
-        │   └─────────────────────┘      │
-        └──────────────────────────────┘
-                       ▲
-                       │ git pull + docker compose build/up
-                       │
-        ┌──────────────────────────────┐
-        │  GitHub Actions (CI/CD)       │
-        │  trigger: push ke branch main │
-        └──────────────────────────────┘
+                         Internet
+                            |
+                            | HTTPS (domain kustom, TLS dikelola Railway)
+                            v
+              +-----------------------------+
+              |  Railway - service publik   |
+              |  Caddy (reverse proxy)      |
+              +-----------------------------+
+                            |
+                            | Railway Private Networking
+                            | (app.railway.internal:8080)
+                            v
+              +-----------------------------+
+              |  Railway - service app      |
+              |  Nginx + file statis        |
+              |  (tidak punya domain publik)|
+              +-----------------------------+
+
+              +-----------------------------+
+              |  GitHub Actions             |
+              |  validasi build Docker &    |
+              |  validasi Caddyfile         |
+              +-----------------------------+
+                            |
+                            | push ke branch main
+                            v
+                Railway auto-deploy
+                (source-based, langsung dari repo GitHub)
 ```
 
-## Kenapa Reverse Proxy Terpisah dari Container Aplikasi?
+Website di-deploy di **Railway**, sebuah platform cloud hosting
+(Platform-as-a-Service). Bukan VPS yang dikonfigurasi sendiri dari awal.
+Ini disebutkan secara terbuka di sini dan di laporan PDF, karena
+memengaruhi cara membaca arsitektur di bawah.
 
-Ini keputusan desain yang sengaja dipilih, bukan default:
+## Kenapa Ada 2 Service Terpisah?
 
-1. **Sertifikat HTTPS dikelola di level sistem operasi VPS**, bukan di dalam
-   container. Ini membuat proses renewal sertifikat (Let's Encrypt, berlaku
-   90 hari) tidak tergantung pada siklus hidup container aplikasi.
-2. **Container aplikasi tidak pernah langsung terekspos ke internet** —
-   hanya bisa diakses lewat `127.0.0.1:8081`, yang berarti port itu hanya
-   bisa diakses dari VPS itu sendiri, diteruskan lewat Nginx reverse proxy.
-   Ini mengurangi permukaan serangan (attack surface).
-3. Nginx reverse proxy yang sama bisa meneruskan ke beberapa service
-   sekaligus (aplikasi web + dashboard monitoring) tanpa perlu container
-   aplikasi tahu-menahu soal itu.
+1. **Service `app` tidak pernah langsung terekspos ke internet.** Service
+   ini cuma bisa diakses lewat jaringan privat Railway
+   (`app.railway.internal`), bukan lewat domain publik. Kalau ada yang
+   mau menyerang service ini langsung dari luar, itu tidak mungkin
+   dilakukan karena memang tidak ada jalur publik ke situ.
+2. **Caddy dipakai di service publik, bukan Nginx.** Percobaan pertama
+   pakai Nginx sebagai reverse proxy sempat gagal karena masalah resolusi
+   DNS internal Railway. Ceritanya lebih lengkap ada di
+   `docs/DEPLOYMENT.md` bagian "Hambatan dan Solusi".
+3. **HTTPS dikelola otomatis oleh Railway di levelnya sendiri**, bukan
+   dipasang manual pakai Certbot. Ini konsekuensi dari memakai PaaS,
+   bukan VPS mentah.
 
 ## Struktur Folder
 
 ```
 abadi-cell-website/
-├── app/                      Kode website statis (HTML, CSS, logo)
+├── app/                  Kode website statis (HTML, CSS, JS, logo)
 ├── nginx/
-│   ├── default.conf          Konfigurasi Nginx DI DALAM container (serve static files)
-│   └── reverse-proxy.conf    Konfigurasi Nginx DI VPS (HTTPS + reverse proxy)
-├── Dockerfile                Definisi image container aplikasi
-├── docker-compose.yml        Orkestrasi container web + monitoring
+│   ├── app.conf           Konfigurasi Nginx di service app (serve file statis)
+│   └── proxy.conf         Konfigurasi Nginx lama untuk proxy, sudah digantikan
+│                          Caddy, disimpan sebagai referensi
+├── Caddyfile              Konfigurasi Caddy untuk service publik
+├── Dockerfile             Image untuk service publik (Caddy)
+├── Dockerfile.app         Image untuk service app (Nginx + file statis)
+├── railway.app.json       Config-as-code untuk service app di Railway
 ├── .github/workflows/
-│   └── deploy.yml            Pipeline CI/CD (auto-deploy saat push ke main)
+│   └── deploy.yml         CI: validasi build Docker & Caddyfile tiap push
 └── docs/
-    └── DEPLOYMENT.md          Laporan proses deployment step-by-step (untuk PDF)
+    └── DEPLOYMENT.md      Laporan lengkap proses deployment
 ```
 
-## Menjalankan Secara Lokal (Sebelum Deploy)
+## Menjalankan Secara Lokal
 
 ```bash
-# Build dan jalankan container aplikasi saja, tanpa reverse proxy/HTTPS
-docker compose up --build web
+# Build dan jalankan service app (static file server) secara lokal
+docker build -f Dockerfile.app -t abadicell-app .
+docker run -p 8080:8080 abadicell-app
 
-# Akses di http://localhost:8081
+# Akses di http://localhost:8080
 ```
 
-## Deployment ke VPS (Ringkasan)
+## Deployment ke Railway (Ringkasan)
 
 Langkah lengkap dengan penjelasan tiap konfigurasi ada di
 [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md). Ringkasannya:
 
-1. Provisioning VPS (Ubuntu), install Docker & Docker Compose
-2. Install Nginx langsung di VPS sebagai reverse proxy
-3. Arahkan domain/subdomain ke IP VPS (DNS A record)
-4. Jalankan `docker compose up -d` untuk container aplikasi
-5. Konfigurasi Nginx reverse proxy meneruskan ke container
-6. Aktifkan HTTPS dengan Certbot (Let's Encrypt)
-7. Setup GitHub Actions agar setiap `git push` otomatis deploy ulang
+1. Hubungkan repository GitHub ke Railway
+2. Hubungkan domain `.my.id` dari Hostinger lewat DNS record (TXT, CNAME, ALIAS)
+3. Setup GitHub Actions untuk validasi build tiap push ke branch main
+4. Pisahkan arsitektur jadi 2 service: `app` (privat) dan proxy (publik, Caddy),
+   terhubung lewat Railway Private Networking
+5. Setup monitoring eksternal dengan UptimeRobot
 
 ## Stack yang Dipakai dan Alasannya
 
 | Komponen | Pilihan | Alasan |
 |---|---|---|
-| Web server aplikasi | Nginx (alpine) | Ringan, image kecil (~20MB), cocok untuk VPS spek kecil |
-| Containerization | Docker + Docker Compose | Reproducible, mudah dipindah antar VPS, standar industri |
-| Reverse proxy + HTTPS | Nginx (host) + Certbot | Pemisahan tanggung jawab, sertifikat dikelola independen dari container |
-| CI/CD | GitHub Actions + SSH deploy | Otomatisasi deploy tanpa akses manual berulang ke VPS |
-| Monitoring | Uptime Kuma | Ringan, self-hosted, dashboard visual untuk bukti uptime |
+| Hosting | Railway (PaaS) | Deploy cepat, private networking bawaan, tidak perlu kelola OS manual |
+| Web server service app | Nginx (alpine) | Ringan, image kecil, cocok untuk file statis |
+| Web server service publik | Caddy 2 | DNS lookup ulang otomatis tiap request, cocok dipakai di private networking Railway |
+| Containerization | Docker, 2 Dockerfile terpisah | Setiap service punya tanggung jawab dan image sendiri |
+| CI/CD | GitHub Actions | Validasi build dan config sebelum Railway auto-deploy |
+| Domain & DNS | Hostinger | Domain `.my.id`, DNS record dikonfigurasi manual ke Railway |
+| Monitoring | UptimeRobot | Gratis, eksternal, tidak perlu hosting/kelola sendiri |
 
 ## Refleksi & Hambatan
 
-*(Diisi setelah proses deployment aktual selesai — lihat `docs/DEPLOYMENT.md`
-bagian "Hambatan dan Solusi" serta "Refleksi".)*
+Cerita lengkap soal debugging error 502 Bad Gateway, kesalahan membuat
+service di project Railway yang berbeda, dan proses berpindah dari Nginx
+ke Caddy, ada di `docs/DEPLOYMENT.md` bagian "Hambatan dan Solusi" dan
+"Refleksi Pembelajaran".
