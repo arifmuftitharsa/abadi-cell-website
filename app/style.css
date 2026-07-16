@@ -15,7 +15,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  scroll-padding-top: 108px;
 }
 
 body {
@@ -54,11 +54,11 @@ h1, h2, h3 { margin: 0; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: 92px;
 }
 
 .brand { display: flex; align-items: center; }
-.brand-logo { height: 48px; width: auto; display: block; }
+.brand-logo { height: 76px; width: auto; display: block; }
 
 .main-nav { display: flex; align-items: center; gap: 32px; }
 
@@ -311,7 +311,7 @@ h2 {
   gap: 24px;
 }
 
-.footer-logo { height: 40px; width: auto; display: block; margin-bottom: 12px; }
+.footer-logo { height: 64px; width: auto; display: block; margin-bottom: 12px; }
 
 .footer-brand p {
   margin: 0;
@@ -358,6 +358,9 @@ h2 {
 
   .main-nav { gap: 16px; }
   .main-nav a:not(.btn) { display: none; }
+
+  .header-inner { height: 80px; }
+  .brand-logo { height: 64px; }
 
   .hero-inner { grid-template-columns: 1fr; gap: 0; }
   .hero-copy { display: flex; flex-direction: column; align-items: center; text-align: center; }
