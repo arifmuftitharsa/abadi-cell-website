@@ -5,6 +5,9 @@ Dibuat sebagai tugas tambahan mata kuliah **Jaringan Komputer** (CS4 2025,
 Universitas Pertamina) — deploy website ke cloud hosting dengan konfigurasi
 web server, containerization, reverse proxy, CI/CD, dan monitoring.
 
+Laporan lengkap proses deployment ada di
+[`docs/Laporan_Deployment_AbadiCell_ArifMuftiTharsa.pdf`](docs/Laporan_Deployment_AbadiCell_ArifMuftiTharsa.pdf).
+
 ## Arsitektur
 
 ```
@@ -52,8 +55,8 @@ memengaruhi cara membaca arsitektur di bawah.
    dilakukan karena memang tidak ada jalur publik ke situ.
 2. **Caddy dipakai di service publik, bukan Nginx.** Percobaan pertama
    pakai Nginx sebagai reverse proxy sempat gagal karena masalah resolusi
-   DNS internal Railway. Ceritanya lebih lengkap ada di
-   `docs/DEPLOYMENT.md` bagian "Hambatan dan Solusi".
+   DNS internal Railway. Ceritanya lebih lengkap ada di laporan PDF,
+   bagian "Hambatan dan Solusi".
 3. **HTTPS dikelola otomatis oleh Railway di levelnya sendiri**, bukan
    dipasang manual pakai Certbot. Ini konsekuensi dari memakai PaaS,
    bukan VPS mentah.
@@ -74,7 +77,7 @@ abadi-cell-website/
 ├── .github/workflows/
 │   └── deploy.yml         CI: validasi build Docker & Caddyfile tiap push
 └── docs/
-    └── DEPLOYMENT.md      Laporan lengkap proses deployment
+    └── Laporan_Deployment_AbadiCell_ArifMuftiTharsa.pdf   Laporan lengkap proses deployment
 ```
 
 ## Menjalankan Secara Lokal
@@ -89,8 +92,9 @@ docker run -p 8080:8080 abadicell-app
 
 ## Deployment ke Railway (Ringkasan)
 
-Langkah lengkap dengan penjelasan tiap konfigurasi ada di
-[`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md). Ringkasannya:
+Langkah lengkap dengan penjelasan tiap konfigurasi ada di laporan PDF:
+[`docs/Laporan_Deployment_AbadiCell_ArifMuftiTharsa.pdf`](docs/Laporan_Deployment_AbadiCell_ArifMuftiTharsa.pdf).
+Ringkasannya:
 
 1. Hubungkan repository GitHub ke Railway
 2. Hubungkan domain `.my.id` dari Hostinger lewat DNS record (TXT, CNAME, ALIAS)
@@ -101,7 +105,7 @@ Langkah lengkap dengan penjelasan tiap konfigurasi ada di
 
 ## Stack yang Dipakai dan Alasannya
 
-| Komponen | Pilihan | Alasan |
+| Komponen | Pilihan | Alasan |s
 |---|---|---|
 | Hosting | Railway (PaaS) | Deploy cepat, private networking bawaan, tidak perlu kelola OS manual |
 | Web server service app | Nginx (alpine) | Ringan, image kecil, cocok untuk file statis |
@@ -115,5 +119,5 @@ Langkah lengkap dengan penjelasan tiap konfigurasi ada di
 
 Cerita lengkap soal debugging error 502 Bad Gateway, kesalahan membuat
 service di project Railway yang berbeda, dan proses berpindah dari Nginx
-ke Caddy, ada di `docs/DEPLOYMENT.md` bagian "Hambatan dan Solusi" dan
-"Refleksi Pembelajaran".
+ke Caddy, ada di laporan PDF bagian "Hambatan dan Solusi" dan "Refleksi
+Pembelajaran".
